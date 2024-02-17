@@ -40,7 +40,8 @@ public class Untrack implements AbstractCommand {
                     response = new SendMessage(user, "Ссылка успешно удалена");
                 }
             } catch (IndexOutOfBoundsException e) {
-                response = new SendMessage(user, "Вы должны ввести номер по шаблону /untrack <пробел> номер в списке ссылок");
+                response =
+                    new SendMessage(user, "Вы должны ввести номер по шаблону /untrack <пробел> номер в списке ссылок");
             } catch (NumberFormatException e) {
                 response = new SendMessage(user, "Вы ввели не число");
             }
