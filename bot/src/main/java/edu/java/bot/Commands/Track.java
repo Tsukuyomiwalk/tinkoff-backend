@@ -19,7 +19,7 @@ public class Track implements AbstractCommand {
     @Override
     public SendMessage handler(Update upd) {
         Long user = upd.message().from().id();
-        if (!links.containsKey(user)) {
+        if (!LINKS.containsKey(user)) {
             return new SendMessage(
                 user,
                 "Вы не зарегистрированы, введите команду /start, чтобы воспользоваться функционалом"
@@ -35,9 +35,10 @@ public class Track implements AbstractCommand {
         if (!isLink(link)) {
             return new SendMessage(user, "Пожалуйста пришлите валидную ссылку");
         }
-        links.get(user).add(link);
+        LINKS.get(user).add(link);
         return new SendMessage(user, "Ссылка успешно добавлена");
     }
+
     static boolean isLink(String link) {
         try {
             new URI(link);

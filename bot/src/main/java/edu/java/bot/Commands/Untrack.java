@@ -17,36 +17,38 @@ public class Untrack implements AbstractCommand {
     @Override
     public SendMessage handler(Update upd) {
         Long user = upd.message().from().id();
-        if (!links.containsKey(user)) {
-            return new SendMessage(
+        SendMessage response;
+        if (!LINKS.containsKey(user)) {
+            response = new SendMessage(
                 user,
                 "Вы не зарегистрированы, введите команду /start, чтобы воспользоваться функционалом"
             );
+        } else {
+            String[] msg = upd.message().text().strip().split(" ");
+            String id;
+            try {
+                id = msg[1];
+                int numId = Integer.parseInt(id);
+
+                if (!isId(numId, user)) {
+                    response = new SendMessage(
+                        user,
+                        "Пожалуйста пришлите валидный номер ссылки в списке, чтобы посмотреть номер напишите /list"
+                    );
+                } else {
+                    LINKS.get(user).remove(numId - 1);
+                    response = new SendMessage(user, "Ссылка успешно удалена");
+                }
+            } catch (IndexOutOfBoundsException e) {
+                response = new SendMessage(user, "Вы должны ввести ссылку по шаблону /track <пробел> ссылка");
+            } catch (NumberFormatException e) {
+                response = new SendMessage(user, "Вы ввели не число");
+            }
         }
-        String[] msg = upd.message().text().strip().split(" ");
-        String id;
-        try {
-            id = msg[1];
-        } catch (IndexOutOfBoundsException e) {
-            return new SendMessage(user, "Вы должны ввести ссылку по шаблону /track <пробел> ссылка");
-        }
-        int numId;
-        try {
-            numId = Integer.parseInt(id);
-        } catch (NumberFormatException e) {
-            return new SendMessage(user, "Вы ввели не число");
-        }
-        if (!isId(numId, user)) {
-            return new SendMessage(
-                user,
-                "Пожалуйста пришлите валидный номер ссылки в списке, чтобы посмотреть номер напишите /list"
-            );
-        }
-        links.get(user).remove(numId - 1);
-        return new SendMessage(user, "Ссылка успешно удалена");
+        return response;
     }
 
     static boolean isId(int id, Long user) {
-        return id > 0 && id <= links.get(user).size();
+        return id > 0 && id <= LINKS.get(user).size();
     }
 }

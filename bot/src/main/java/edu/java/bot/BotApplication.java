@@ -13,8 +13,6 @@ import edu.java.bot.Commands.Start;
 import edu.java.bot.Commands.Track;
 import edu.java.bot.Commands.Untrack;
 import edu.java.bot.configuration.ApplicationConfig;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

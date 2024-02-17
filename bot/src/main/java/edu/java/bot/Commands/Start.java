@@ -18,13 +18,13 @@ public class Start implements AbstractCommand {
     @Override
     public SendMessage handler(Update upd) {
         Long user = upd.message().from().id();
-        if (links.containsKey(user)) {
+        if (LINKS.containsKey(user)) {
             return new SendMessage(
                 user,
                 "Вы уже зарегистрированы, чтобы ознакомиться с функционалом - напишите (/help)"
             );
         }
-        links.put(user, new LinkedList<>());
+        LINKS.put(user, new LinkedList<>());
         return new SendMessage(
             user,
             "Вы успешно зарегистрированы, чтобы ознакомиться с функционалом - напишите (/help)"

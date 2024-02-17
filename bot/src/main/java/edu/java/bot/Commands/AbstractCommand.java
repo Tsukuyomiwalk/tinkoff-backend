@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public interface AbstractCommand {
-    HashMap<Long, LinkedList<String>> links = new HashMap<>();
+    HashMap<Long, LinkedList<String>> LINKS = new HashMap<>();
 
     String commandName();
 
@@ -15,12 +15,12 @@ public interface AbstractCommand {
     SendMessage handler(Update upd);
 
     default HashMap<Long, LinkedList<String>> getLinks() {
-        return links;
+        return LINKS;
     }
 
     default void setLinks(HashMap<Long, LinkedList<String>> hm) {
-        links.clear();
-        links.putAll(hm);
+        LINKS.clear();
+        LINKS.putAll(hm);
     }
 
     default boolean isCommand(Update upd) {
