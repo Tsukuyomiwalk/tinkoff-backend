@@ -17,6 +17,7 @@ public interface AbstractCommand {
     default HashMap<Long, LinkedList<String>> getLinks() {
         return links;
     }
+
     default void setLinks(HashMap<Long, LinkedList<String>> hm) {
         links.clear();
         links.putAll(hm);
