@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 public record ApplicationConfig(
     @NotNull
     Scheduler scheduler,
+
     @NotNull
     String gitHubUrl,
     @NotNull

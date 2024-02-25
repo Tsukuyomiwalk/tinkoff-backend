@@ -1,10 +1,10 @@
 package edu.java.clients.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.OffsetDateTime;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.OffsetDateTime;
 
 @Setter @Getter @Data public class QuestionInfo {
 

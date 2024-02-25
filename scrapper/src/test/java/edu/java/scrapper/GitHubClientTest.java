@@ -14,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @WireMockTest(httpPort = 8029)
 class GitHubClientTest {
-
     private final GitHubClient githubClient = new GitHubClient(WebClient.create("http://localhost:8029"));
 
     @Test

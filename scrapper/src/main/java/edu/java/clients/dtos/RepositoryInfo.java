@@ -1,11 +1,12 @@
 package edu.java.clients.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.OffsetDateTime;
+import java.util.Map;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.OffsetDateTime;
-import java.util.Map;
+
 
 @Setter @Getter @Data
 public class RepositoryInfo {

@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class StackOverFlowClient extends AbstractWebClient {
-
     private final WebClient stackOverflowWebClient;
 
     public Mono<QuestionInfo> getQuestionInfo(long questionId) {

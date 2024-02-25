@@ -21,6 +21,7 @@ public abstract class AbstractWebClient {
             .bodyToMono(link);
     }
 
+
     protected Mono<? extends Throwable> handleErrorResponse(ClientResponse response) {
         if (response.statusCode().is4xxClientError()) {
             return Mono.error(new ResponseStatusException(

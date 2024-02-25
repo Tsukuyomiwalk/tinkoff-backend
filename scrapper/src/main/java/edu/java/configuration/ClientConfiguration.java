@@ -12,6 +12,7 @@ public class ClientConfiguration {
             .baseUrl(applicationConfig.gitHubUrl())
             .build();
     }
+
     @Bean
     public WebClient stackOverflowWebClient(ApplicationConfig applicationConfig) {
         return WebClient.builder()
