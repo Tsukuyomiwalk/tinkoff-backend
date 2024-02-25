@@ -1,4 +1,6 @@
 app:
+  gitHubUrl: https://api.github.com
+  stackOverflowUrl: https://api.stackexchange.com/2.3
   scheduler:
     enable: true
     interval: 10s
