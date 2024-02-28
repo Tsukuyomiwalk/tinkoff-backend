@@ -5,7 +5,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Objects;
+
 
 public interface AbstractCommand {
     Map<Long, LinkedList<String>> LINKS = new HashMap<>();

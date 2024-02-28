@@ -15,11 +15,11 @@ import edu.java.bot.commands.Untrack;
 import java.util.List;
 
 public class Bot {
-    private static final List<AbstractCommand> cmd =
+    private static final List<AbstractCommand> CMD =
         List.of(new Start(), new CmdList(), new Help(), new Track(), new Untrack());
 
     public void startBot(TelegramBot bot) {
-        BotCommand[] cmds = cmd.stream().map(abstractCommand ->
+        BotCommand[] cmds = CMD.stream().map(abstractCommand ->
             new BotCommand(abstractCommand.commandName(), abstractCommand.purpose())).toArray(BotCommand[]::new);
         bot.execute(new SetMyCommands(cmds));
         Logging logging = new Logging();
@@ -35,13 +35,14 @@ public class Bot {
 
     private static SendMessage commandBotHandler(Update upd) {
         Long user = upd.message().from().id();
-        for (AbstractCommand command : cmd) {
+        for (AbstractCommand command : CMD) {
             try {
                 if (command.isCommand(upd)) {
                     return command.handler(upd);
                 }
             } catch (NullPointerException e) {
-                return new SendMessage(user, "Такой команды я не знаю, нажмите /help для просмтора возможных команд");
+                return new SendMessage(user,
+                    "Формат таких сообщений я не поддерживаю, нажмите /help для просмтора возможных команд");
             }
         }
         return new SendMessage(user, "Такой команды я не знаю, нажмите /help для просмтора возможных команд");
