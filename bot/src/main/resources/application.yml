@@ -1,5 +1,5 @@
 app:
-  telegram-token: 6868721866:AAH-kwVjjXr9qhdWnLkjgFZRvQhZUEAhRww
+  telegram-token: unset
   urls:
     scrapper: http://localhost:8080
 spring:
