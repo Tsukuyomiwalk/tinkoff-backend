@@ -19,5 +19,12 @@ public class ClientConfiguration {
             .baseUrl(applicationConfig.stackOverflowUrl())
             .build();
     }
+
+    @Bean
+    public WebClient botClient(ApplicationConfig cfg) {
+        return WebClient.builder()
+            .baseUrl(cfg.stackOverflowUrl())
+            .build();
+    }
 }
 

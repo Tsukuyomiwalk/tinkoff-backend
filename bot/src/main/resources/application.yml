@@ -1,5 +1,7 @@
-app.telegram-token: unset
-
+app:
+  telegram-token: unset
+  urls:
+    scrapper: http://localhost:8080
 spring:
   application:
     name: bot
