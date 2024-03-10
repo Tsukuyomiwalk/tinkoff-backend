@@ -1,10 +1,7 @@
 package migrations;
 
 import edu.java.scrapper.IntegrationTest;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,21 +27,23 @@ public class InsertSelectDBTest extends IntegrationTest {
         statement.close();
     }
 
+    @BeforeEach
+    public void clearTable() throws SQLException {
+        statement.executeUpdate("DELETE FROM links");
+    }
+
     @Test
-    @DisplayName("Insert link")
     public void insertTest() throws SQLException {
         int result = statement.executeUpdate(SQL_INSERT);
         assertThat(result).isEqualTo(1);
     }
 
     @Test
-    @DisplayName("Select link")
     public void selectTest() throws SQLException {
         statement.executeUpdate(SQL_INSERT);
         ResultSet resultSet = statement.executeQuery("SELECT * FROM links");
         assertThat(resultSet.next()).isTrue();
         assertThat(resultSet.getString("link")).isEqualTo("http://example.com");
         assertThat(resultSet.getInt("chat_id")).isEqualTo(1);
-        statement.executeUpdate("DELETE FROM links");
     }
 }
