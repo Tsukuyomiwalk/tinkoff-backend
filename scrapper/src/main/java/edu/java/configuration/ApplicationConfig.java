@@ -18,7 +18,7 @@ public record ApplicationConfig(
     @DefaultValue("https://api.stackexchange.com/2.3")
     String stackOverflowUrl,
     @NotNull
-    @DefaultValue("https://api.stackexchange.com/2.3")
+    @DefaultValue("http://localhost:8090")
     String bot
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
