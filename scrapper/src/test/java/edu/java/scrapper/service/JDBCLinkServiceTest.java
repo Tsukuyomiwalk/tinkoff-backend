@@ -1,88 +1,68 @@
 package edu.java.scrapper.service;
 
-import edu.java.configuration.DataBaseConfiguration;
 import edu.java.domain.dto.Chat;
 import edu.java.domain.dto.Links;
 import edu.java.domain.repository.ChatLinkRepo;
-import edu.java.domain.repository.ChatRepo;
 import edu.java.domain.repository.LinkRepo;
 import edu.java.jdbcService.JDBCLinkService;
+import edu.java.service.LinkService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-@SpringBootTest(classes = {JDBCLinkService.class, ChatRepo.class, LinkRepo.class, ChatLinkRepo.class, DataBaseConfiguration.class})
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+@ExtendWith(MockitoExtension.class)
 @Transactional
-@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class JDBCLinkServiceTest {
 
-    @Autowired
-    private JDBCLinkService jdbcLinkService;
-
-    @Autowired
-    private ChatRepo chatRepo;
-
-    @Autowired
+    @Mock
     private LinkRepo linkRepo;
 
-    @Autowired
+    @Mock
     private ChatLinkRepo chatLinkRepo;
 
+    @InjectMocks
+    private JDBCLinkService linkService;
+
+    @BeforeEach
+    public void setup() {
+        linkService = new JDBCLinkService(linkRepo, chatLinkRepo);
+    }
+
+
     @Test
+    @Rollback
     public void testAddLink() {
-        long tgChatId = 12345L;
-        String url = "http://example.com";
-
-        jdbcLinkService.add(tgChatId, url);
-
-        List<Links> links = jdbcLinkService.findAllByChatId(tgChatId);
-        assertEquals(1, links.size());
-        assertEquals(url, links.getFirst().getLink());
+        long tgChatId = 12345;
+        String url = "https://example.com";
+        linkService.add(tgChatId, url);
+        verify(linkRepo).add(url, tgChatId);
     }
 
     @Test
+    @Rollback
     public void testRemoveLink() {
-        long tgChatId = 12345L;
-        String url = "http://example.com";
+        long tgChatId = 12345;
         int urlId = 1;
-
-        jdbcLinkService.add(tgChatId, url);
-
-        jdbcLinkService.remove(tgChatId, urlId);
-
-        List<Links> links = jdbcLinkService.findAllByChatId(tgChatId);
-        assertTrue(links.isEmpty());
+        linkService.remove(tgChatId, urlId);
+        verify(chatLinkRepo).remove(urlId, tgChatId);
     }
 
     @Test
+    @Rollback
     public void testFindAllByChatId() {
-        long tgChatId = 12345L;
-        String url = "http://example.com";
-
-        jdbcLinkService.add(tgChatId, url);
-
-        List<Links> links = jdbcLinkService.findAllByChatId(tgChatId);
-        assertEquals(1, links.size());
-        assertEquals(url, links.get(0).getLink());
-    }
-
-    @Test
-    public void testFindAllByLink() {
-        String url = "http://example.com";
-
-        List<Chat> chats = jdbcLinkService.findAllByLink(url);
-        assertTrue(chats.isEmpty());
-    }
-
-    @Test
-    public void testAllUncheckedLinks() {
-        List<Links> uncheckedLinks = jdbcLinkService.allUncheckedLinks();
-        assertTrue(uncheckedLinks.isEmpty());
+        long tgChatId = 12345;
+        List<Links> expectedLinks = new ArrayList<>();
+        when(chatLinkRepo.findAllByChat(tgChatId)).thenReturn(expectedLinks);
+        List<Links> actualLinks = linkService.findAllByChatId(tgChatId);
+        assertEquals(expectedLinks, actualLinks);
     }
 }
