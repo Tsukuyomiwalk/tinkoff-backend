@@ -2,9 +2,19 @@ package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.ScrapperClient;
+import edu.java.bot.controller.dto.responses.LinkResponse;
 import java.util.LinkedList;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
+@Component
+@RequiredArgsConstructor
 public class CmdList implements AbstractCommand {
+
+    private final ScrapperClient scrapperClient;
+
     @Override
     public String commandName() {
         return "/list";
@@ -18,27 +28,28 @@ public class CmdList implements AbstractCommand {
     @Override
     public SendMessage handler(Update upd) {
         Long user = upd.message().from().id();
-        if (!LINKS.containsKey(user)) {
-            return new SendMessage(
-                user,
-                "Вы не зарегистрированы, введите команду /start, чтобы воспользоваться функционалом"
-            );
-        }
+        return scrapperClient.getLinks(user)
+            .flatMap(linksResponse -> {
+                if (linksResponse.getLinks().isEmpty()) {
+                    return Mono.just(new SendMessage(
+                        user,
+                        "Список ссылок пуст, чтобы добавить ссылки воспользуйтесь /track <пробел> ссылка"
+                    ));
+                } else {
+                    StringBuilder st = new StringBuilder();
+                    LinkedList<LinkResponse> urls = new LinkedList<>(linksResponse.getLinks());
 
-        if (LINKS.get(user).isEmpty()) {
-            return new SendMessage(
+                    for (int i = 0; i < urls.size(); i++) {
+                        LinkResponse url = urls.get(i);
+                        st.append(url).append(" -> №").append(i + 1).append('\n');
+                    }
+                    return Mono.just(new SendMessage(user, st.toString()));
+                }
+            })
+            .onErrorResume(error -> Mono.just(new SendMessage(
                 user,
-                "Список ссылок пуст, чтобы добавить ссылки воспользуйтесь /track <пробел> ссылка"
-            );
-        }
-        StringBuilder st = new StringBuilder();
-        LinkedList<String> urls = LINKS.get(user);
-
-        for (int i = 0; i < urls.size(); i++) {
-            String url = urls.get(i);
-            st.append(url).append(" -> №").append(i + 1).append('\n');
-        }
-        return new SendMessage(user, st.toString());
+                "Произошла ошибка при получении списка отслеживаемых ссылок"
+            ))).block();
     }
 
 }

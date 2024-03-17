@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class InsertSelectDBTest extends IntegrationTest {
     private static Statement statement;
-    private final String SQL_INSERT = "INSERT INTO links (id, link, chat_id, created_at) VALUES (1, 'http://example.com', 1, now())";
+    private final String SQL_INSERT = "INSERT INTO links (id, link, upd_at, checked_at) VALUES (1, 'http://example.com', 1, now())";
 
 
     @BeforeAll
