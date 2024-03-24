@@ -26,7 +26,9 @@ public record ApplicationConfig(
     @DefaultValue("http://localhost:8090")
     String bot
 ) {
+
     public enum AccessType { JDBC, JPA }
+
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 }
