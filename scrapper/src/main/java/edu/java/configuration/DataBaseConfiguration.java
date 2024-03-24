@@ -5,6 +5,7 @@ import edu.java.domain.dto.LinkChat;
 import edu.java.domain.dto.Links;
 import java.time.ZoneOffset;
 import javax.sql.DataSource;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 @Configuration
+@ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jdbc")
 public class DataBaseConfiguration {
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/scrapper";
     private static final String POSTGRES_STR = "postgres";
