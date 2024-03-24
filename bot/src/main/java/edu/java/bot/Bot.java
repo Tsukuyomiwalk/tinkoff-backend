@@ -7,19 +7,17 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.commands.AbstractCommand;
-import edu.java.bot.commands.CmdList;
-import edu.java.bot.commands.Help;
-import edu.java.bot.commands.Start;
-import edu.java.bot.commands.Track;
-import edu.java.bot.commands.Untrack;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
+@RequiredArgsConstructor
 public class Bot {
-    private static final List<AbstractCommand> CMD =
-        List.of(new Start(), new CmdList(), new Help(), new Track(), new Untrack());
+    private final List<AbstractCommand> cmd;
 
     public void startBot(TelegramBot bot) {
-        BotCommand[] cmds = CMD.stream().map(abstractCommand ->
+        BotCommand[] cmds = cmd.stream().map(abstractCommand ->
             new BotCommand(abstractCommand.commandName(), abstractCommand.purpose())).toArray(BotCommand[]::new);
         bot.execute(new SetMyCommands(cmds));
         Logging logging = new Logging();
@@ -33,9 +31,9 @@ public class Bot {
         });
     }
 
-    private static SendMessage commandBotHandler(Update upd) {
+    private SendMessage commandBotHandler(Update upd) {
         Long user = upd.message().from().id();
-        for (AbstractCommand command : CMD) {
+        for (AbstractCommand command : cmd) {
             try {
                 if (command.isCommand(upd)) {
                     return command.handler(upd);
