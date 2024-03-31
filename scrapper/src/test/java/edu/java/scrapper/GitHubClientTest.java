@@ -45,10 +45,8 @@ class GitHubClientTest {
         StepVerifier.create(githubClient.getRepositoryInfo("test2", "test2"))
             .expectErrorSatisfies(throwable ->
                 assertThat(throwable)
-                    .isInstanceOf(ResponseStatusException.class)
-                    .satisfies(exception ->
-                        assertThat(((ResponseStatusException) exception).getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST)
-                    )
+                    .isInstanceOf(RuntimeException.class)
+                    .hasMessageContaining("Retries exhausted: 3/3")
             )
             .verify();
     }

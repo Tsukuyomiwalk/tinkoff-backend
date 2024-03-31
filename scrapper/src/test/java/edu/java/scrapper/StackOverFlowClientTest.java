@@ -7,8 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.Exceptions;
 import reactor.test.StepVerifier;
 import reactor.util.retry.Retry;
+
+import java.time.Duration;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StackOverFlowClientTest {
 
     private final StackOverFlowClient stackOverflowClient =
-        new StackOverFlowClient(WebClient.create("http://localhost:8029"), Retry.max(3));
+        new StackOverFlowClient(WebClient.create("http://localhost:8029"), Retry.fixedDelay(3, Duration.ofMillis(1)));
 
     @Test
     @DisplayName("Test StackOverflow client handling 200 response")
@@ -48,13 +52,7 @@ class StackOverFlowClientTest {
                 .withStatus(400)));
 
         StepVerifier.create(stackOverflowClient.getQuestionInfo(123456))
-            .expectErrorSatisfies(throwable ->
-                assertThat(throwable)
-                    .isInstanceOf(ResponseStatusException.class)
-                    .satisfies(exception ->
-                        assertThat(((ResponseStatusException) exception).getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST)
-                    )
-            )
+            .expectErrorMessage("Retries exhausted: 3/3")
             .verify();
     }
 

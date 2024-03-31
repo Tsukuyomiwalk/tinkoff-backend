@@ -49,7 +49,7 @@ public class BotClientTest {
             .expectErrorSatisfies(throwable ->
                 assertThat(throwable)
                     .isInstanceOf(RuntimeException.class)
-                    .hasMessageContaining("Failed to fetch links: 400 BAD_REQUEST")
+                    .hasMessageContaining("Retries exhausted: 3/3")
             ).verify();
     }
 
