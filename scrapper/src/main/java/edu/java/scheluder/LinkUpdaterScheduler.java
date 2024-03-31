@@ -35,6 +35,7 @@ public class LinkUpdaterScheduler {
     private final GitHubClient gitHubClient;
     private final BotClient botClient;
     private final StackOverFlowClient stackOverflowClient;
+    private final String getException = "Error creating URI for link: {}";
 
     @Scheduled(fixedDelayString = "#{@'app-edu.java.configuration.ApplicationConfig'.scheduler.interval}")
     public void upd() {
@@ -57,7 +58,7 @@ public class LinkUpdaterScheduler {
                                     ))
                                     .subscribe();
                             } catch (URISyntaxException e) {
-                                log.error("Error creating URI for link: {}", link.getLink(), e);
+                                log.error(getException, link.getLink(), e);
                             }
                         }
                         linkUpdater.refreshUpdateDate(link.getLink(), repositoryInfo.getUpdatedAt());
@@ -76,7 +77,7 @@ public class LinkUpdaterScheduler {
                                     ))
                                     .subscribe();
                             } catch (URISyntaxException e) {
-                                log.error("Error creating URI for link: {}", link.getLink(), e);
+                                log.error(getException, link.getLink(), e);
                             }
                         }
                         linkUpdater.refreshUpdateDate(link.getLink(), questionInfo.getLastActivityDate());

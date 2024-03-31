@@ -6,7 +6,6 @@ import edu.java.bot.ScrapperClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import static java.lang.System.lineSeparator;
 
 @RequiredArgsConstructor
 @Component
