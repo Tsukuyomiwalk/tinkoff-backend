@@ -32,8 +32,6 @@ public class JDBCChatServiceTest {
     }
 
     @Test
-    @Transactional
-    @Rollback
     void registerTest() {
         long chatId = 123L;
         when(chatRepo.findAll()).thenReturn(List.of(new Chat(chatId)));
@@ -42,8 +40,6 @@ public class JDBCChatServiceTest {
     }
 
     @Test
-    @Transactional
-    @Rollback
     void unregisterTest() {
         long chatId = 124L;
         when(chatRepo.findAll()).thenReturn(List.of(new Chat(chatId)));

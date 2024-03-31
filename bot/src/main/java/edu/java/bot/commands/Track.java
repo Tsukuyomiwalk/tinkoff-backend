@@ -4,9 +4,11 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.ScrapperClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
+@Component
 public class Track implements AbstractCommand {
     ScrapperClient scrapperClient;
 
@@ -23,7 +25,8 @@ public class Track implements AbstractCommand {
     @Override
     public SendMessage handler(Update upd) {
         Long user = upd.message().from().id();
-        return scrapperClient.register(user)
+        String[] message = upd.message().text().split(" ");
+        return scrapperClient.addLink(user, message[1])
             .thenReturn(new SendMessage(user, "Ссылка успешно добавлена"))
             .onErrorResume(error -> Mono.just(new SendMessage(
                 user,

@@ -99,6 +99,6 @@ public class ScrapperController {
     public ResponseEntity<LinkResponse> removeLink(Long chatId, RemoveLinkRequest request) {
         linkService.remove(chatId, Integer.parseInt(String.valueOf(request.getId())));
         log.debug("Remove link {} for chat id={}", request.url, chatId);
-        return new ResponseEntity<>(new LinkResponse(chatId, request.url), null, Integer.parseInt("200"));
+        return ResponseEntity.ok(new LinkResponse(chatId, request.url));
     }
 }

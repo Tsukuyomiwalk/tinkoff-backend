@@ -23,7 +23,7 @@ public class ChatLinkRepo {
 
     public List<Links> findAllByChat(long tgChatId) {
         return jdbcTemplate.query(
-            "SELECT * FROM linkChat JOIN link using (link) where chat_id = ?",
+            "select l.* from linkChat lc join link l on l.id=lc.link_id where lc.chat_id=?",
             linksMapper, tgChatId
         );
     }
@@ -34,8 +34,6 @@ public class ChatLinkRepo {
             chatMapper, link
         );
     }
-
-
 
     public void add(LinkChat linkChat) {
         Chat chat = linkChat.getChat();
