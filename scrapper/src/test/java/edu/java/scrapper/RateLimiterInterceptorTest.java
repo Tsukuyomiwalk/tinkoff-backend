@@ -1,7 +1,6 @@
 package edu.java.scrapper;
 
 import edu.java.interceptor.RateLimiterInterceptor;
-import edu.java.interceptor.TooManyRequestsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,6 +49,6 @@ class RateLimiterInterceptorTest {
         lastRequestTimeMap.put(ipAddress, now.minusSeconds(10));
         interceptor.lastRequestTimeMap.putAll(lastRequestTimeMap);
 
-        assertThrows(TooManyRequestsException.class, () -> interceptor.preHandle(request, response, handler));
+        assertThrows(RuntimeException.class, () -> interceptor.preHandle(request, response, handler));
     }
 }

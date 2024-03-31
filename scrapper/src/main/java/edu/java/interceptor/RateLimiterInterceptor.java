@@ -13,7 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class RateLimiterInterceptor implements HandlerInterceptor {
 
-    private final Map<String, Instant> lastRequestTimeMap = new HashMap<>();
+    public final Map<String, Instant> lastRequestTimeMap = new HashMap<>();
 
     @Override
     @SuppressWarnings("MagicNumber")
