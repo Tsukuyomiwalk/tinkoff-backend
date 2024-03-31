@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StackOverFlowClientTest {
 
     private final StackOverFlowClient stackOverflowClient =
-        new StackOverFlowClient(WebClient.create("http://localhost:8029"), Retry.fixedDelay(3, Duration.ofMillis(1)));
+        new StackOverFlowClient(WebClient.create("http://localhost:8029"), Retry.backoff(3, Duration.ofMillis(1)));
 
     @Test
     @DisplayName("Test StackOverflow client handling 200 response")
