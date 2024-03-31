@@ -1,5 +1,14 @@
 app:
   telegram-token: unset
+  rate-limiter:
+    enable: true
+    limit: 120
+    refill-per-minute: 120
+  retry-specification:
+      type: fixed
+      max-attempts: 3
+      delay: 1000000
+      codes: 429, 500, 501, 502, 503, 504
   urls:
     scrapper: http://localhost:8080
 spring:
