@@ -8,13 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.test.StepVerifier;
+import reactor.util.retry.Retry;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @WireMockTest(httpPort = 8029)
 class GitHubClientTest {
-    private final GitHubClient githubClient = new GitHubClient(WebClient.create("http://localhost:8029"));
+    private final GitHubClient githubClient = new GitHubClient(WebClient.create("http://localhost:8029"), Retry.max(3));
 
     @Test
     @DisplayName("Test GitHub Client Handling 200 response")

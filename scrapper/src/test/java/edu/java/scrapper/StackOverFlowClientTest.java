@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.test.StepVerifier;
+import reactor.util.retry.Retry;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StackOverFlowClientTest {
 
     private final StackOverFlowClient stackOverflowClient =
-        new StackOverFlowClient(WebClient.create("http://localhost:8029"));
+        new StackOverFlowClient(WebClient.create("http://localhost:8029"), Retry.max(3));
 
     @Test
     @DisplayName("Test StackOverflow client handling 200 response")

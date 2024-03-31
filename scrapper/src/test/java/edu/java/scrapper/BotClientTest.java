@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.test.StepVerifier;
+import reactor.util.retry.Retry;
 import java.net.URI;
 import java.util.List;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @WireMockTest(httpPort = 8029)
 
 public class BotClientTest {
-    private final BotClient botClient = new BotClient(WebClient.create("http://localhost:8029"));
+    private final BotClient botClient = new BotClient(WebClient.create("http://localhost:8029"), Retry.max(3));
 
     private final UpdatesRequests linkUpdateRequest = new UpdatesRequests(
         1L,

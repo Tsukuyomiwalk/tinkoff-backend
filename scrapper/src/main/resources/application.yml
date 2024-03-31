@@ -6,6 +6,15 @@ app:
     enable: true
     interval: 10s
     force-check-delay: 10s
+  rate-limiter:
+    enable: true
+    limit: 120
+    refill-per-minute: 120
+  retry:
+      type: fixed
+      max-attempts: 3
+      delay: 10000
+      codes: 429, 500, 501, 502, 503, 504
 
 
 spring:
