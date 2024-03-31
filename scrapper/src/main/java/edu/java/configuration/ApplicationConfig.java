@@ -31,7 +31,7 @@ public record ApplicationConfig(
     String bot
 ) {
 
-    public enum AccessType {JDBC, JPA}
+    public enum AccessType { JDBC, JPA }
 
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

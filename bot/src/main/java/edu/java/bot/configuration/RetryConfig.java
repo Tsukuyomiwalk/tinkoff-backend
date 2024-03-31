@@ -16,6 +16,7 @@ public class RetryConfig {
     private final ApplicationConfig applicationConfig;
 
     @Bean
+    @SuppressWarnings("MagicNumber")
     @ConditionalOnProperty(prefix = "app", name = "retry.back-off-type", havingValue = "fixed")
     public Retry fixedRetry() {
         var retrySpec = applicationConfig.retrySpecification();
@@ -35,6 +36,7 @@ public class RetryConfig {
     }
 
     @Bean
+    @SuppressWarnings("MagicNumber")
     @ConditionalOnProperty(prefix = "app", name = "retry.back-off-type", havingValue = "exponential")
     public Retry exponentialRetry() {
         var retrySpec = applicationConfig.retrySpecification();

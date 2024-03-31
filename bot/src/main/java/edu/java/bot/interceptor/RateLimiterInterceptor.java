@@ -2,13 +2,14 @@ package edu.java.bot.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
 
 @Component
 public class RateLimiterInterceptor implements HandlerInterceptor {
@@ -16,6 +17,7 @@ public class RateLimiterInterceptor implements HandlerInterceptor {
     private final Map<String, Instant> lastRequestTimeMap = new HashMap<>();
 
     @Override
+    @SuppressWarnings("MagicNumber")
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler)
         throws RuntimeException {
         String ipAddress = request.getRemoteAddr();

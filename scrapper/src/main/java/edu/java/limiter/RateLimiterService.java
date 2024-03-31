@@ -15,6 +15,7 @@ public class RateLimiterService implements RateLimiter {
 
     private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
     private final int maxRequestsPerSecond = 10;
+
     @Override
     public Bucket resolve(String ip) {
         return buckets.computeIfAbsent(ip, k -> {

@@ -1,12 +1,11 @@
 package edu.java.bot.utils;
 
-import org.reactivestreams.Publisher;
-import reactor.core.publisher.Flux;
-import reactor.util.retry.Retry;
-
 import java.time.Duration;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.Flux;
+import reactor.util.retry.Retry;
 
 public class LinearRetry extends Retry {
 

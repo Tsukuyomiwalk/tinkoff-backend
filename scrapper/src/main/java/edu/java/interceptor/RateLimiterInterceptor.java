@@ -16,6 +16,7 @@ public class RateLimiterInterceptor implements HandlerInterceptor {
     private final Map<String, Instant> lastRequestTimeMap = new HashMap<>();
 
     @Override
+    @SuppressWarnings("MagicNumber")
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler)
         throws RuntimeException {
         String ipAddress = request.getRemoteAddr();
@@ -26,7 +27,6 @@ public class RateLimiterInterceptor implements HandlerInterceptor {
 
             int maxRequestsPerSecond = 10;
             int requestsPerSecond = (int) (maxRequestsPerSecond * ((double) timeElapsed.toMillis() / 1000));
-
             if (requestsPerSecond >= maxRequestsPerSecond) {
                 throw new TooManyRequestsException();
             }
