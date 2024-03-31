@@ -39,7 +39,6 @@ public class JDBCLinkServiceTest {
 
 
     @Test
-    @Rollback
     public void testAddLink() {
         long tgChatId = 12345;
         String url = "https://example.com";
@@ -48,7 +47,6 @@ public class JDBCLinkServiceTest {
     }
 
     @Test
-    @Rollback
     public void testRemoveLink() {
         long tgChatId = 12345;
         int urlId = 1;
@@ -57,7 +55,6 @@ public class JDBCLinkServiceTest {
     }
 
     @Test
-    @Rollback
     public void testFindAllByChatId() {
         long tgChatId = 12345;
         List<Links> expectedLinks = new ArrayList<>();

@@ -1,6 +1,5 @@
 package edu.java.scheluder;
 
-
 import edu.java.clients.bot.BotClient;
 import edu.java.clients.bot.Requests.UpdatesRequests;
 import edu.java.clients.git.GitHubClient;
@@ -58,11 +57,11 @@ public class LinkUpdaterScheduler {
                                     ))
                                     .subscribe();
                             } catch (URISyntaxException e) {
-                                throw new RuntimeException(e);
+                                log.error("Error creating URI for link: {}", link.getLink(), e);
                             }
                         }
                         linkUpdater.refreshUpdateDate(link.getLink(), repositoryInfo.getUpdatedAt());
-                    });
+                    }, error -> log.error("Error getting repository info for link: {}", link.getLink(), error));
             } else if (!isStack.getFirst().equals("-1")) {
                 stackOverflowClient.getQuestionInfo(Long.parseLong(isStack.getLast()))
                     .subscribe(questionInfo -> {
@@ -77,22 +76,21 @@ public class LinkUpdaterScheduler {
                                     ))
                                     .subscribe();
                             } catch (URISyntaxException e) {
-                                throw new RuntimeException(e);
+                                log.error("Error creating URI for link: {}", link.getLink(), e);
                             }
                         }
                         linkUpdater.refreshUpdateDate(link.getLink(), questionInfo.getLastActivityDate());
-                    });
+                    }, error -> log.error("Error getting question info for link: {}", link.getLink(), error));
             }
         }
-
     }
 
-    @NotNull private static String getDescription(Links link) {
+    @NotNull
+    private static String getDescription(Links link) {
         return "Есть обновление: " + link.getLink();
     }
 
     private boolean isUpdateNeeded(OffsetDateTime checked, OffsetDateTime updatedAt) {
         return checked.isBefore(updatedAt);
     }
-
 }

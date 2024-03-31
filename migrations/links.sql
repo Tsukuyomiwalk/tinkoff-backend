@@ -4,8 +4,8 @@
 
 create table if not exists links
 (
-    id         integer                             not null,
-    link       text                                not null primary key,
+    id         integer primary key                 not null,
+    link       text unique                         not null,
     upd_at     timestamp default current_timestamp not null,
     checked_at timestamp default current_timestamp not null
 );
