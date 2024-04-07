@@ -52,9 +52,12 @@ public record ApplicationConfig(
         Set<Integer> codes
     ) {
     }
+
     public record TopicInfo(
         @NotNull String name,
         @NotNull Integer partitions,
         @NotNull Integer replicas
     ) {
+
+    }
 }
