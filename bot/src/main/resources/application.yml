@@ -11,11 +11,25 @@ app:
       codes: 429, 500, 501, 502, 503, 504
   urls:
     scrapper: http://localhost:8080
+  topic:
+    name: "bot_updates_queue"
+    partitions: 10
+    replicas: 1
+  dead-topic:
+      name: "bot_updates_dlq"
+      partitions: 10
+      replicas: 1
+
 spring:
   application:
     name: bot
   jackson:
     time-zone: UTC
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: Group1
+      auto-offset-reset: earliest
 
 server:
   port: 8090

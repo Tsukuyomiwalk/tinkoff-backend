@@ -15,6 +15,11 @@ app:
       max-attempts: 3
       delay: 10000
       codes: 429, 500, 501, 502, 503, 504
+  topic:
+      name: "bot_updates_queue"
+      partitions: 10
+      replicas: 1
+  use-queue: true
 
 
 spring:

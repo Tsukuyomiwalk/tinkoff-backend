@@ -16,8 +16,9 @@ public record ApplicationConfig(
     String telegramToken,
     Uris urls,
     RateLimiter rateLimiter,
-    Retry retrySpecification
-) {
+    Retry retrySpecification,
+    TopicInfo topic,
+    TopicInfo deadTopic) {
     public record Uris(
         @NotNull
         @DefaultValue("http://localhost:8080")
@@ -37,6 +38,13 @@ public record ApplicationConfig(
         @NotNull Integer maxAttempts,
         Duration delay,
         Set<Integer> codes
+    ) {
+    }
+
+    public record TopicInfo(
+        @NotNull String name,
+        @NotNull Integer partitions,
+        @NotNull Integer replicas
     ) {
     }
 }

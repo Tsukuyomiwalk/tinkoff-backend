@@ -18,6 +18,8 @@ public record ApplicationConfig(
     AccessType databaseAccessType,
     RateLimiter rateLimiter,
     Retry retry,
+    TopicInfo topic,
+    Boolean useQueue,
 
     @NotNull
     @DefaultValue("https://api.github.com")
@@ -50,4 +52,9 @@ public record ApplicationConfig(
         Set<Integer> codes
     ) {
     }
+    public record TopicInfo(
+        @NotNull String name,
+        @NotNull Integer partitions,
+        @NotNull Integer replicas
+    ) {
 }
