@@ -1,5 +1,6 @@
 package edu.java.bot;
 
+
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.BotCommand;
@@ -7,16 +8,27 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.commands.AbstractCommand;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class Bot {
     private final List<AbstractCommand> cmd;
+    private Counter messageCnt;
+
+    @Autowired
+    public Bot(List<AbstractCommand> cmd, MeterRegistry metricsCnt) {
+        this.cmd = cmd;
+        this.messageCnt = metricsCnt.counter("message_processed_count");
+    }
 
     public void startBot(TelegramBot bot) {
+        messageCnt.increment();
         BotCommand[] cmds = cmd.stream().map(abstractCommand ->
             new BotCommand(abstractCommand.commandName(), abstractCommand.purpose())).toArray(BotCommand[]::new);
         bot.execute(new SetMyCommands(cmds));
