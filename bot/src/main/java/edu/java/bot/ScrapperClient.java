@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
 @Component
 @RequiredArgsConstructor
@@ -18,6 +19,9 @@ public class ScrapperClient {
     private static final String CHAT_HEADER = "Tg-Chat-Id";
     private static final String CHAT_END = "/tg-chat/{id}";
     private static final String LINKS_END = "/links";
+
+    private final Retry retry;
+
     private final WebClient scrapperWebClient;
 
     public Mono<Void> register(Long id) {
@@ -53,7 +57,7 @@ public class ScrapperClient {
                 status -> status.is4xxClientError() || status.is5xxServerError(),
                 response -> Mono.error(new RuntimeException("Failed to fetch: " + response.statusCode()))
             )
-            .bodyToMono(LinksResponse.class);
+            .bodyToMono(LinksResponse.class).retryWhen(retry);
 
     }
 
@@ -67,7 +71,7 @@ public class ScrapperClient {
                 status -> status.is4xxClientError() || status.is5xxServerError(),
                 response -> Mono.error(new RuntimeException("Failed to fetch links: " + response.statusCode()))
             )
-            .bodyToMono(LinkResponse.class);
+            .bodyToMono(LinkResponse.class).retryWhen(retry);
     }
 
     private Mono<Void> tgHttpOperations(HttpMethod method, Long id) {
@@ -75,7 +79,7 @@ public class ScrapperClient {
             .uri(CHAT_END, id)
             .retrieve()
             .bodyToMono(Void.class)
-            .onErrorResume(this::handleError);
+            .onErrorResume(this::handleError).retryWhen(retry);
     }
 
     private <T> Mono<T> handleError(Throwable error) {
